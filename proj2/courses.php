@@ -108,7 +108,6 @@ function stats($pdo){
         ORDER BY COUNT(*) DESC LIMIT 5;";
 
     $stmt = $pdo->query($q);
-    // var_dump($stmt);
     if ($stmt){
         echo "Academic Department | Number of Courses \n"; 
         while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
