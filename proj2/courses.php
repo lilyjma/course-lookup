@@ -7,30 +7,36 @@ use App\SQLiteCreateTable as SQLiteCreateTable;
 use App\SQLiteInsert; 
 
 
-if ($argc === 3 || $argc === 2){
+if ($argc === 2 || $argc == 3){
     $sqlite = new SQLiteConnection;
     $pdo = $sqlite->connect(); 
 
     if ($pdo == null){
         echo "PDO connection failed \n";
-        return; 
-    }
-
-    if($argv[1] === "import"){
-        import($argv[2], $pdo); 
-    }
-    if($argv[1] === "lookup"){
-        lookup($argv[2], $pdo);
+        exit; 
     }
     if($argv[1] === "stats"){
         stats($pdo); 
-    } 
+        $sqlite = null;
+    }
+    if($argv[1] === "import"){
+        import($argv[2], $pdo); 
+        $sqlite = null; 
+    }
+    if($argv[1] === "lookup"){
+        lookup($argv[2], $pdo);
+        $sqlite = null; 
+    }
 }else{
-    echo "usage:
+    echo_usage();
+}
+
+function echo_usage(){
+      echo "usage:
         1. php courses.php import [name.csv]
         2. php courses.php lookup CALL_NUMBER
         3. php courses.php stats\n";
-    exit; 
+      exit;
 }
 
 function import($file, $pdo){
@@ -39,7 +45,7 @@ function import($file, $pdo){
     $sql_table->createTable(); 
 
     $ins = new SQLiteInsert($pdo);
-    $f = fopen($file, 'r') or exit("Cannot open file($file)"); 
+    $f = fopen($file, 'r') or exit("Cannot open file($file)\n"); 
 
     if(fgetcsv($f) !== FALSE){ //skips first one line
         while(($arr = fgetcsv($f)) !== FALSE){
@@ -51,14 +57,15 @@ function import($file, $pdo){
                 exit; 
             }     
        }
+        echo "Sucessfully imported $file. \n";
+    }else{
+        echo "Import failed \n";
     }
-    $sql_table->getTable(); 
-
-    echo "Sucessfully imported $file. \n"; 
 }
 
 function lookup($call_num, $pdo){
     //call number format: {Subject} {Bulletin_Prefix}{Course_Number};
+    //ex: COMS W3157
 
     $arr = explode(" ", strtoupper($call_num));
     $subject = $arr[0];
@@ -74,6 +81,7 @@ function lookup($call_num, $pdo){
         $course_num = substr($arr[1], 2, strlen($arr[1]));
     }else{
         echo "Check length of call number \n";
+        exit; 
     }
 
     $stmt = $pdo->query('SELECT * FROM courses;');
