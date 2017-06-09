@@ -11,6 +11,6 @@ ex: php courses.php lookup "COMS W3157"
 3. calculates statistics about courses in the database. 
 ex: php courses.php stats
 
-The call number format for course search is {Subject Area Code} {Bulletin Prefix Code}{Course Number}. The stats functionality returns the top 5 departments that offer the most courses. It also returns the top 10 most frequently used words in courses names, excluding "the", "and", "in", "of", "to".
+The call number format for course search is {Subject Area Code} {Bulletin Prefix Code}{Course Number}. The stats functionality returns the top 5 departments that offer the most courses. It also returns the top 10 most frequently used words in course names, excluding "the", "and", "in", "of", "to".
 
 The program is implemented using PHP 5.3 and SQLite. 
