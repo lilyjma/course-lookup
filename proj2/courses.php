@@ -100,7 +100,6 @@ function lookup($call_num, $pdo){
 
 function stats($pdo){
     echo "Departments with the most courses: \n";
-    //var_dump($pdo);
 
     $q = "SELECT Department AS \"Academic_Department\",
         COUNT(*) AS \"Number_of_courses\"
@@ -122,6 +121,8 @@ function stats($pdo){
 
     $q = "SELECT Name FROM courses;";
     $stmt = $pdo->query($q);
+    $exclude = array("the", "and", "in", "of", "to"); 
+
     if ($stmt){
         //store word and associated frequency in words[]
         $words = array(); 
@@ -129,7 +130,7 @@ function stats($pdo){
             $arr = explode(" ", $row['Name']);
             for($i=0; $i<count($arr); $i++){
                 $word = strtolower(preg_replace("/[^a-z\d-]+/i", "", $arr[$i]));
-                if(strlen($word)!==0 && ctype_alnum($word)){
+                if(strlen($word)!==0 && ctype_alnum($word) && !in_array($word, $exclude)){
                     if(!(array_key_exists($word, $words))){
                         $words[$word] = 1;
                     }else{
@@ -160,10 +161,10 @@ function stats($pdo){
             unset($words[$max_freq_word]);
         }
         $arr = array_combine($top_ten_word, $top_ten_freq);
-        echo str_pad("Word", 10);
+        echo str_pad("Word", 12);
         echo "|Frequency\n"; 
         foreach ($arr as $key=>$value){
-            echo str_pad($key, 12);
+            echo str_pad($key, 15);
             echo "$value \n";
         }
 
