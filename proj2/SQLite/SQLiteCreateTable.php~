@@ -1,0 +1,49 @@
+<?php
+
+namespace App;
+
+class SQLiteCreateTable{
+    /**
+     * PDO object
+     * @var \PDO
+     */
+
+    private $pdo;
+
+    /**
+     * Connect to SQLite Database
+     */
+
+    public function __construct($pdo){
+        $this->pdo = $pdo;
+    }
+
+    //create table
+    public function createTable(){
+        $command = 'CREATE TABLE IF NOT EXISTS courses(
+            Department TEXT NOT NULL,
+            Subject TEXT NOT NULL,
+            Bulletin_Prefix TEXT NOT NULL,
+            Course_Number INTEGER NOT NULL,
+            Name TEXT NOT NULL,
+            Min_Points INTEGER NOT NULL,
+            Max_Points INTEGER NOT NULL);';
+
+        //execute sql command to create table
+       $this->pdo->exec($command);
+    }
+
+    public function getTable(){
+        $stmt = $this->pdo->query('SELECT * FROM courses;');
+       // var_dump($stmt); 
+        if ($stmt){
+            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+                print_r($row); //maybe try $row['Name'];
+            }
+        }else{
+            echo 'query() didn\'t return obj';
+        }
+    }
+}
+
+
