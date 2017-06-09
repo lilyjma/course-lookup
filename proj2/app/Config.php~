@@ -1,9 +1,0 @@
-<?php
-
-namespace SQLite;
-
-class Config{
-    const PATH_TO_SQLITE_FILE = 'db/courses.db';
-}
-
-?>
