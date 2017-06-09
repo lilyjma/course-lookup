@@ -1,5 +1,5 @@
 # course-lookup
-# written by : lilyjma 
+Written by : lilyjma 
 
 This is a command line tool that queries and provides statistics about departments and courses at Columbia. The course data is stored in a CSV called course-lookup-courses.csv.
 
